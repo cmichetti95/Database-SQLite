@@ -1,0 +1,29 @@
+/* List the Account_ID of all buyers
+and of sellers who have made zero dollars */
+
+SELECT account_id
+FROM ACCOUNT a, STORE s
+WHERE a.Account_ID = s.Owner_ID
+AND Num_Sales = '0';
+
+
+
+
+/* Find the most expensive product */
+
+SELECT Pname
+FROM PRODUCT
+GROUP BY P_ID
+ORDER BY MAX(Cost) DESC;
+
+
+
+
+
+/* Retrieve a given seller’s chat history */
+
+SELECT Chat_history
+FROM MSGING_SYSTEM
+WHERE Acct1_ID = '1485304';
+
+

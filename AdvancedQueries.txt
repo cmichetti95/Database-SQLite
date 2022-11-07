@@ -1,0 +1,106 @@
+
+/* Provide a list of buyer names, along with the total dollar amount each buyer has spent */
+
+SELECT Fname, Lname, SUM(Price)
+FROM Account a, BUYERHISTORY b, ORDER1 o
+WHERE  a.Account_ID = b.Buyer_ID
+AND   b.Order_ID = o.Order_Id
+GROUP BY Fname, Lname;
+
+
+
+
+/* Provide a list of buyer names and e-mail addresses for buyers who have spent more than the average buyer */
+
+SELECT Fname, Lname, Email, p
+FROM
+(SELECT Fname, Lname, Email, SUM(Price) p, AVG(Price) i
+FROM Account a, BUYERHISTORY b, ORDER1 o
+WHERE  a.Account_ID = b.Buyer_ID
+AND   b.Order_ID = o.Order_Id
+GROUP BY Fname, Lname)
+WHERE p > i;
+
+
+
+
+/* Provide a list of the IP Item names and associated total copies sold to all buyers, sorted from the IP Item that
+has sold the most individual copies to the IP Item that has sold the least */
+
+SELECT Pname, Units_sold
+FROM PRODUCT
+ORDER BY units_sold DESC;
+
+
+
+
+/* Provide a list of the IP Item names and associated dollar totals for copies sold to all buyers, sorted from the IP
+Item that has sold the highest dollar amount to the IP Item that has sold the smallest. */
+
+SELECT Pname ProductNames, SUM(Cost) CopiesSoldToBuyers
+FROM 	ORDERPRODUCTS AS op
+	INNER JOIN
+      	PRODUCT AS p
+	ON op.P_ID = p.P_ID
+GROUP BY Pname
+ORDER BY SUM(Cost) DESC;
+
+
+
+
+/* Find the most popular Seller (i.e. the one who has sold the most IP Items) */
+
+SELECT Owner_ID Seller
+FROM STORE
+GROUP BY Num_Sales
+ORDER BY Num_Sales DESC
+LIMIT 1;
+
+
+
+
+/* Find the most profitable seller (i.e. the one who has brought in the most money) */
+
+SELECT Seller_ID
+FROM SELLER
+GROUP BY Seller_ID
+ORDER BY MAX(Money_Made) DESC
+LIMIT 1;
+
+
+
+
+/* Provide a list of buyer names for buyers who purchased anything listed by the most profitable Seller. */
+
+SELECT Fname, Lname
+FROM ORDER1, ORDERSELLERS, ACCOUNT
+WHERE	ORDERSELLERS.Order_ID = ORDER1.Order_ID
+AND	ORDER1.B_ID = ACCOUNT.Account_ID
+AND	S_Id = (
+		SELECT Seller_ID s
+		FROM SELLER
+		GROUP BY Seller_ID
+		ORDER BY MAX(Money_Made) DESC
+		LIMIT 1);
+
+
+
+
+/* Provide the list of sellers who listed the IP Items purchased by the buyers who have spent more than the
+average buyer. */
+
+SELECT S_ID
+FROM ORDERSELLERS
+WHERE Order_ID IN (
+	SELECT Order_ID
+	FROM ORDER1
+	WHERE B_ID IN (
+		SELECT Buyer_ID
+		FROM
+		(SELECT Buyer_ID, SUM(Price) p, AVG(Price) i
+		FROM BUYERHISTORY b, ORDER1 o
+		WHERE  b.Order_ID = o.Order_Id
+		GROUP BY Buyer_ID)
+		WHERE p > i))
+GROUP BY S_ID;
+

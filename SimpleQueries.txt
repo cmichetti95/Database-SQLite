@@ -1,0 +1,77 @@
+
+/* Find the titles of all IP Items by a given Seller that cost less than $10 (you choose how to designate the seller) */
+
+SELECT P_ID  
+FROM PRODUCT, STORE, ACCOUNT 
+WHERE  PRODUCT.Str_ID = STORE.Store_ID 
+AND STORE.Owner_ID = ACCOUNT.Account_ID
+AND Cost < '10'
+AND Fname = 'Avery' AND Lname = 'Baker';
+
+
+
+
+/* Give all the titles and their dates of purchase made by given buyer (you choose how to designate the buyer) */
+
+SELECT		Order_ID, Pdate
+FROM		ORDER1
+WHERE		B_ID = '9841584';
+
+
+
+
+/* Find the seller names for all sellers with less than 5 IP Items for sale */
+
+SELECT Fname, Lname  
+FROM ACCOUNT, SELLER
+WHERE  ACCOUNT.Account_ID = SELLER.Seller_ID 
+AND Inventory_size < '5';
+
+
+
+
+/* Give all the buyers who purchased a IP Item by a given seller and the names of the IP Items they purchased */
+
+SELECT 	B_ID, Pname
+FROM 	ORDER1 AS o
+	INNER JOIN
+      	ORDERPRODUCTS AS op
+	ON o.Order_ID = op.Order_ID
+	INNER JOIN
+	PRODUCT p
+	ON op.P_ID = p.P_ID;
+
+
+
+
+/* Find the total number of IP Items purchased by a single buyer (you choose how to designate the buyer) */
+
+SELECT		SUM(Num_Items)
+FROM		ORDER1
+WHERE		B_ID = '1485304'
+
+
+
+
+/* Find the buyer who has purchased the most IP Items and the total number of IP Items they have purchased */
+
+SELECT B_ID, SUM(Num_Items)
+FROM ORDER1
+GROUP BY B_ID
+ORDER BY SUM(Num_Items) DESC
+LIMIT 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

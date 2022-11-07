@@ -1,0 +1,36 @@
+/* Example: A new account signing up as a buyer */
+
+/* Creating the initial account */
+INSERT INTO ACCOUNT
+        VALUES ('1111111', 'test342@gmail.com', '', 'Lucy', 'Skai'); 
+
+/* Making the new account into a Buyer, and since has not purchased anything, and
+has not opened a store yet and therefore not a seller, that is all for a new buyer. */
+INSERT INTO BUYER
+        VALUES ('1111111', '302  Buckeye St', '0'); 
+
+
+
+
+
+
+
+/* Example: Deleting a store whose ID is '2611109' */
+
+/* Deleting the real store */
+DELETE FROM STORE WHERE Store_ID = '2611109';
+
+/* Deleting the products of the store in PRODUCT table */
+DELETE FROM PRODUCT WHERE Str_ID = '2611109';
+
+/* Deleting the correlation between the seller and that store */
+DELETE FROM SELLERSTORES WHERE Store_ID = '2611109';
+
+/* Deleting the the store and its products from the list of stores */
+DELETE FROM STORELIST WHERE Store_ID = '2611109';
+
+/* Deleting the product from SELLERPRODUCTS since it does not exist anymore since 
+its store was deleted */
+DELETE FROM SELLERPRODUCTS WHERE P_ID = '4881373';
+
+

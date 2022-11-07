@@ -1,0 +1,143 @@
+CREATE TABLE ACCOUNT (
+    Account_ID int NOT NULL,
+    Email varchar(30) NOT NULL,
+    Profile_Pic image,
+    Fname varchar(25) NOT NULL,
+    Lname varchar(25) NOT NULL,
+    PRIMARY KEY (Account_ID)
+);
+
+CREATE TABLE BUYER (
+    Buyer_ID int NOT NULL,
+    Address varchar(50) NOT NULL,
+    Num_Items int,
+    FOREIGN KEY (Buyer_ID) REFERENCES ACCOUNT(Account_ID)
+    FOREIGN KEY (Num_Items) REFERENCES ORDER1(Order_ID)
+);
+
+CREATE TABLE BUYERHISTORY (
+    Buyer_ID int NOT NULL,
+    Order_ID int NOT NULL,
+    FOREIGN KEY (Buyer_ID) REFERENCES ACCOUNT(Account_ID)
+    FOREIGN KEY (Order_ID) REFERENCES ORDER1(Order_ID)
+);
+
+CREATE TABLE SELLER (
+    Seller_ID int NOT NULL,
+    Money_Made int NOT NULL,
+    Inventory_size int NOT NULL,
+    Karma int NOT NULL,
+    FOREIGN KEY (Seller_ID) REFERENCES ACCOUNT(Account_ID)
+);
+
+CREATE TABLE SELLERPRODUCTS (
+    Seller_ID int NOT NULL,
+    P_ID int NOT NULL,
+    FOREIGN KEY (Seller_ID) REFERENCES ACCOUNT(Account_ID)
+    FOREIGN KEY (P_ID) REFERENCES PRODUCT(P_ID)
+);
+
+CREATE TABLE SELLERSTORES (
+    Seller_ID int NOT NULL,
+    Store_ID int NOT NULL,
+    FOREIGN KEY (Seller_ID) REFERENCES ACCOUNT(Account_ID)
+    FOREIGN KEY (Store_ID) REFERENCES STORE(Store_ID)
+);
+
+CREATE TABLE STORE (
+    Store_ID int NOT NULL,
+    Owner_ID int NOT NULL,
+    Name varchar(50) NOT NULL,
+    Description varchar(150),
+    Logo image,
+    Num_Sales int NOT NULL,
+    Date_Opened varchar(15) NOT NULL,
+    PRIMARY KEY (Store_ID)
+    FOREIGN KEY (Owner_ID) REFERENCES ACCOUNT(Account_ID)
+);
+
+CREATE TABLE STORELIST (
+    Store_ID int NOT NULL,
+    Product_ID int NOT NULL,
+    FOREIGN KEY (Store_ID) REFERENCES STORE(Store_ID)
+    FOREIGN KEY (Product_ID) REFERENCES PRODUCT(P_ID)
+);
+
+CREATE TABLE PRODUCT (
+    P_ID int NOT NULL,
+    Pname varchar(25) NOT NULL,
+    Str_ID int NOT NULL,
+    File_Type varchar(10) NOT NULL,
+    Cost int NOT NULL,
+    Description varchar(150),
+    Size varchar(10) NOT NULL,
+    Units_sold int NOT NULL,
+    Pictures image,
+    PRIMARY KEY (P_ID)
+    FOREIGN KEY (Str_ID) REFERENCES STORE(Store_ID)
+);
+
+CREATE TABLE ORDER1 (
+    Order_ID int NOT NULL,
+    B_ID int NOT NULL,
+    Num_Items int NOT NULL,
+    Price int NOT NULL,
+    Pdate varchar(15) NOT NULL,
+    PRIMARY KEY (Order_ID)
+    FOREIGN KEY (B_ID) REFERENCES ACCOUNT(Account_ID)
+);
+
+CREATE TABLE ORDERSELLERS (
+    Order_ID int NOT NULL,
+    S_ID int NOT NULL,
+    FOREIGN KEY (S_ID) REFERENCES STORE(Store_ID)
+    FOREIGN KEY (Order_ID) REFERENCES ORDER1(Order_ID)
+);
+
+CREATE TABLE ORDERPRODUCTS (
+    Order_ID int NOT NULL,
+    P_ID int NOT NULL,
+    FOREIGN KEY (P_ID) REFERENCES PRODUCT(P_ID)
+    FOREIGN KEY (Order_ID) REFERENCES ORDER1(Order_ID)
+);
+
+CREATE TABLE PAYMENT (
+    Transaction_ID int NOT NULL,
+    Ord_ID int NOT NULL,
+    PRIMARY KEY (Transaction_ID)
+    FOREIGN KEY (Ord_ID) REFERENCES ORDER1(Order_ID)
+);
+
+CREATE TABLE PAYMENTTYPES (
+    Transaction_ID int NOT NULL,
+    Payment_Type varchar(25) NOT NULL,
+    FOREIGN KEY (Transaction_ID) REFERENCES PAYMENT(Order_ID)
+);
+
+
+CREATE TABLE FEEDBACK (
+    B_ID int NOT NULL,
+    P_ID int NOT NULL,
+    Rating int NOT NULL,
+    Review varchar(255),
+    FOREIGN KEY (B_ID) REFERENCES ACCOUNT(Account_ID)
+    FOREIGN KEY (P_ID) REFERENCES PRODUCT(P_ID)
+);
+
+CREATE TABLE TRENDING (
+    T_ID int NOT NULL,
+    Str_ID int NOT NULL,
+    P_ID int NOT NULL,
+    PRIMARY KEY (T_ID)
+    FOREIGN KEY (Str_ID) REFERENCES STORE(Store_ID)
+    FOREIGN KEY (P_ID) REFERENCES PRODUCT(P_ID)
+);
+
+CREATE TABLE MSGING_SYSTEM (
+    Acct1_ID int NOT NULL,
+    ACCT2_ID int NOT NULL,
+    Text_Chat varchar(255),
+    Chat_history varchar(255),
+    FOREIGN KEY (Acct1_ID) REFERENCES ACCOUNT(Account_ID)
+    FOREIGN KEY (ACCT2_ID) REFERENCES ACCOUNT(Account_ID)
+);

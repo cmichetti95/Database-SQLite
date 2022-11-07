@@ -1,0 +1,18 @@
+/*This view will display a table of each store's and their average product prices. This
+will allow the user to see the average price value a store will list their products for. */
+
+CREATE VIEW Stores_Avg_Product_Price AS
+SELECT s.Name, AVG(p.Cost)
+FROM PRODUCT p, STORE s
+WHERE p.Str_ID = s.Store_ID
+GROUP BY s.Name
+ORDER BY AVG(p.Cost) DESC;
+
+
+/*This view will display the most expensive order and the purchaser’s name. It will
+do this by finding the maximum price of an order and finding the buyer’s name. */
+
+CREATE VIEW Most_Exp_Order AS
+SELECT a.Fname, a.Lname, MAX(Price)
+FROM ACCOUNT a, ORDER1 o
+WHERE a.Account_ID = o.B_ID;

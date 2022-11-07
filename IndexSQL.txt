@@ -1,0 +1,17 @@
+/*A hash index function would work well on our table ORDER1. The purpose of this
+index is so to account for multiple products being bought in a single order. A hash
+index would work best for this because it is good for looking up values based on 
+equality tests. */
+
+CREATE INDEX OrderIndex
+ON ORDER1(Order_ID, B_ID);
+
+
+
+/* A hash index function would also work well on our TRENDING table. The purpose of 
+this would be to account for if a store has multiple products trending at the same 
+time. A hash index would  work best for this because it is good for looking up 
+values based on equality */
+
+CREATE INDEX TrendingIndex
+ON Trending(Str_ID, P_ID);
